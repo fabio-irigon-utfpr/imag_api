@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload de Imagem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+            text-align: center;
+            margin-top: 80px;
+        }
+        .box {
+            background: white;
+            display: inline-block;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        input[type=file] {
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Upload de Imagem</h2>
+        <form action="/process" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required><br>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>
