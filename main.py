@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 def home():
-    return {"message": "API FastAPI + OpenCV ativa!"}
+    return {"message": "API FastAPI + OpenCV ativa!!"}
 
 @app.post("/process")
 async def process_image(file: UploadFile = File(...)):
