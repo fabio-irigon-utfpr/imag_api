@@ -1,10 +1,12 @@
 ## Para teste local:
 ### Navegar para a pasta local
 python -m venv myenv
+
 myenv\Scripts\activate  (se linux: source myenv/bin/activate)
 
 ### Instalação
 pip install --upgrade pip
+
 pip install -r requirements.txt 
 
 ### Iniciar servidor
