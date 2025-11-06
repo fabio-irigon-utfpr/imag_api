@@ -44,7 +44,7 @@ async def process_image_flexible(request: Request):
             }
         else:
             debug_info[key] = {
-                "value_preview": str(value)[:100],
+                "value_preview": str(value)[:20],
                 "is_uploadfile": False
             }
 
