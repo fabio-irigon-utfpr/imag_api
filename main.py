@@ -26,6 +26,31 @@ async def process_image(file: UploadFile = File(...)):
     return {"mean_brightness": mean_brightness}
 
 
+@app.post("/process_any")
+async def process_image_flexible(request: Request):
+    """
+    Endpoint alternativo — aceita qualquer nome de campo (para testes)
+    """
+    form = await request.form()
+
+    # procura o primeiro arquivo enviado no formulário
+    file = next((v for v in form.values() if hasattr(v, "filename")), None)
+    if not file:
+        return {"error": "nenhum arquivo encontrado no upload"}
+
+    # lê e processa o arquivo da mesma forma
+    contents = await file.read()
+    np_arr = np.frombuffer(contents, np.uint8)
+    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    mean_brightness = float(np.mean(gray))
+
+    return {
+        "mean_brightness": mean_brightness,
+        "filename": file.filename,
+        "field_name": [k for k, v in form.items() if v is file][0],
+    }
+
 
 @app.get("/upload", response_class=HTMLResponse)
 def upload_form(request: Request):
