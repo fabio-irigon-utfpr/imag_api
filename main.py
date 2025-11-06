@@ -32,6 +32,27 @@ async def process_image_flexible(request: Request):
     Endpoint alternativo — aceita qualquer nome de campo (para testes)
     """
     form = await request.form()
+    debug_info = {}
+
+    # lista tudo que chegou no corpo
+    for key, value in form.items():
+        if hasattr(value, "filename"):
+            debug_info[key] = {
+                "filename": value.filename,
+                "content_type": value.content_type,
+                "is_uploadfile": True
+            }
+        else:
+            debug_info[key] = {
+                "value_preview": str(value)[:100],
+                "is_uploadfile": False
+            }
+
+    if not any(hasattr(v, "filename") for v in form.values()):
+        return {
+            "error": "nenhum arquivo encontrado no upload",
+            "detalhes_recebidos": debug_info
+        }
 
     # procura o primeiro arquivo enviado no formulário
     file = next((v for v in form.values() if hasattr(v, "filename")), None)
