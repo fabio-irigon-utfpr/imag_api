@@ -1,6 +1,8 @@
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+import base64
 import cv2
 import numpy as np
 
@@ -25,6 +27,27 @@ async def process_image(file: UploadFile = File(...)):
     mean_brightness = float(np.mean(gray))
     return {"mean_brightness": mean_brightness}
 
+
+class TextInput(BaseModel):
+    encoded_text: str
+
+@app.post("/decode_base64_text/")
+async def decode_base64_text(data: TextInput):
+    """
+    Decodes a base64 encoded text string.
+    """
+    try:
+        # Decode the base64 string to bytes
+        decoded_bytes = base64.b64decode(data.encoded_text)
+
+        np_array = np.frombuffer(decoded_bytes, np.uint8)
+        image = cv2.imdecode(np_array, cv2.IMREAD_COLOR) 
+        
+        return {"brilho": float(np.mean(image))}
+    except base64.binascii.Error as e:
+        print(e);
+    except UnicodeDecodeError as e:
+        print(e)
 
 @app.post("/process_any")
 async def process_image_flexible(request: Request):
@@ -79,4 +102,3 @@ def upload_form(request: Request):
     Página simples para upload de imagem.
     """
     return templates.TemplateResponse("upload.html", {"request": request})
-
