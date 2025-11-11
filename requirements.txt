@@ -3,3 +3,5 @@ uvicorn
 opencv-python-headless
 python-multipart
 jinja2
+pybase64
+pydantic
